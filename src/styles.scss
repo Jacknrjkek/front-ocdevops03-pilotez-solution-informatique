@@ -1,1 +1,145 @@
-/* You can add global styles to this file, and also import other style files */
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #F08E80 0%, #F5C0A8 100%);
+    --background-color: #1a1a1a;
+    --card-bg: #FFFFFF;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --btn-primary-bg: #1a1a1a;
+    --btn-primary-text: #FFFFFF;
+    --btn-hover-bg: #333333;
+    --font-family-main: 'Outfit', sans-serif;
+    --border-radius-card: 24px;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family-main);
+    background: var(--primary-gradient);
+    background-attachment: fixed;
+    /* Ensure gradient covers full view */
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/* Authentication & Layout Container */
+.auth-container,
+.dashboard-container,
+.main-content {
+    /* Background removed as body handles it */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.auth-card {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: var(--border-radius-card);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+}
+
+.brand-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+h2 {
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+
+    &:focus {
+        outline: none;
+        border-color: var(--btn-primary-bg);
+    }
+}
+
+/* Button Styles */
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+        background: var(--btn-hover-bg);
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+}
+
+.link-text {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+
+    a {
+        color: var(--btn-primary-bg);
+        text-decoration: none;
+        font-weight: 500;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+
+    &.alert-danger {
+        background: #FEE2E2;
+        color: #DC2626;
+    }
+
+    &.alert-success {
+        background: #DCFCE7;
+        color: #15803D;
+    }
+}
