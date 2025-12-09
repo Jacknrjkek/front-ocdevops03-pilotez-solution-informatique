@@ -1,0 +1,50 @@
+/* Handled mostly by global styles, specifics here */
+:host {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    padding: 1.5rem 3rem;
+}
+
+.logo a {
+    color: #1a1a1a;
+    /* Dark text on orange */
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: rgba(26, 26, 26, 0.7);
+    /* Dark semi-transparent */
+    font-weight: 600;
+
+    &:hover {
+        color: #1a1a1a;
+    }
+}
+
+.nav-btn {
+    background: #1a1a1a;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+}

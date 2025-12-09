@@ -1,0 +1,36 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="brand-title">DataShare</div>
+        <h2>Créer un compte</h2>
+
+        <div *ngIf="isSuccessful" class="alert alert-success">
+            Inscription réussie ! Redirection...
+        </div>
+
+        <div *ngIf="isSignUpFailed" class="alert alert-danger">
+            L'inscription a échoué: {{ errorMessage }}
+        </div>
+
+        <form (ngSubmit)="onSubmit()" #registerForm="ngForm" *ngIf="!isSuccessful">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" [(ngModel)]="form.email" required email
+                    placeholder="Saisissez votre email..." />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" [(ngModel)]="form.password" required minlength="6"
+                    placeholder="Saisissez votre mot de passe..." />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn-primary">Créer mon compte</button>
+            </div>
+
+            <div class="link-text">
+                Tu as déjà un compte ? <a routerLink="/login">Se connecter</a>
+            </div>
+        </form>
+    </div>
+</div>
