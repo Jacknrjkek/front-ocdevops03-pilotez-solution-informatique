@@ -25,9 +25,7 @@ body {
 }
 
 /* Authentication & Layout Container */
-.auth-container,
-.dashboard-container,
-.main-content {
+.auth-container {
     /* Background removed as body handles it */
     min-height: 100vh;
     display: flex;

@@ -24,4 +24,8 @@ export class Dashboard {
     this.storageService.clean();
     this.router.navigate(['/login']);
   }
+
+  goToUpload(): void {
+    this.router.navigate(['/home']);
+  }
 }
