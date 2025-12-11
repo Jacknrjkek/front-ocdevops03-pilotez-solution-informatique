@@ -56,8 +56,5 @@
     <div *ngIf="message" class="alert mt-3" [class.alert-success]="progress === 100"
         [class.alert-danger]="progress === 0 && message">
         {{ message }}
-        <div *ngIf="progress === 100" class="mt-2">
-            <button class="btn-sm" (click)="reset()">Nouveau fichier</button>
-        </div>
     </div>
 </div>

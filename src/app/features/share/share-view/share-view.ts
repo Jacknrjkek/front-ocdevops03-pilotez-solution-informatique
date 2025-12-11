@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ShareService } from '../../../services/share.service';
@@ -19,6 +19,7 @@ export class ShareView implements OnInit {
 
   private route = inject(ActivatedRoute);
   private shareService = inject(ShareService);
+  private cd = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.token = this.route.snapshot.paramMap.get('token');
@@ -35,6 +36,8 @@ export class ShareView implements OnInit {
       next: (data) => {
         this.fileData = data;
         this.loading = false;
+        // Force update just in case
+        this.cd.detectChanges();
       },
       error: (err) => {
         if (err.status === 410) {
@@ -43,6 +46,7 @@ export class ShareView implements OnInit {
           this.errorMessage = 'Fichier introuvable ou erreur serveur.';
         }
         this.loading = false;
+        this.cd.detectChanges(); // Force update
       }
     });
   }

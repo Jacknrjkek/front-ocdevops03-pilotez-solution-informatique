@@ -190,13 +190,19 @@
             }
         }
 
-        &.access {
+        &.share {
             background: white;
             border-color: #FED7aa; // Light orange border
             color: #EA580C; // Strong orange text
 
             &:hover {
                 background: #FFF7ED;
+            }
+
+            &.copied {
+                background: #ECFDF5;
+                border-color: #10B981;
+                color: #059669; // Green
             }
         }
     }

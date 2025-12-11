@@ -27,8 +27,11 @@
 .upload-card {
     text-align: center;
     display: flex;
+    flex-direction: column !important;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
+    width: 100%;
 }
 
 .upload-trigger {

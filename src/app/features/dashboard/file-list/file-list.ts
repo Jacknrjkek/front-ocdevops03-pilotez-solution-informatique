@@ -120,13 +120,27 @@ export class FileList implements OnInit {
     this.cd.detectChanges(); // Force UI to close modal
   }
 
-  copyLink(token: string): void {
+  copyLink(token: string, event: Event): void {
+    if (!token) return;
+
     const url = 'http://localhost:4200/share/' + token;
     navigator.clipboard.writeText(url).then(() => {
-      this.message = 'Lien copié !';
-      setTimeout(() => this.message = '', 3000);
+      // Button Feedback
+      const button = event.target as HTMLButtonElement;
+      const originalText = button.innerText;
+      button.innerText = '✅ Copié !';
+      button.classList.add('copied');
+
+      this.message = 'Lien copié dans le presse-papier !';
+
+      setTimeout(() => {
+        button.innerText = originalText;
+        button.classList.remove('copied');
+        this.message = '';
+      }, 2000);
     }).catch(err => {
       console.error('Failed to copy: ', err);
+      this.message = 'Erreur lors de la copie du lien';
     });
   }
 }

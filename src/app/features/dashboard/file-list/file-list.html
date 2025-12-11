@@ -34,8 +34,8 @@
                 <button class="btn-action delete" (click)="openDeleteModal(file.id)">
                     🗑️ Supprimer
                 </button>
-                <button class="btn-action access" (click)="copyLink(file.shareToken)">
-                    Accéder ➔
+                <button class="btn-action share" (click)="copyLink(file.shareToken, $event)">
+                    🔗 Copier le lien
                 </button>
             </div>
             <!-- Allow delete even if expired to clean up list -->
