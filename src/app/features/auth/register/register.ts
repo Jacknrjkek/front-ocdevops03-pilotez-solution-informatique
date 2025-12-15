@@ -33,7 +33,28 @@ export class Register {
       },
       error: err => {
         console.error('Register Error:', err);
-        this.errorMessage = err.error?.message || err.message || "Erreur d'inscription";
+        // Default message
+        let msg = "Erreur d'inscription";
+
+        if (err.error) {
+          // Check for specific backend message
+          if (err.error.message) {
+            msg = err.error.message;
+          }
+
+          // Check for validation errors (Spring Boot default structure)
+          if (err.error.errors && Array.isArray(err.error.errors)) {
+            const validationErrors = err.error.errors.map((e: any) => {
+              // Try to translate common constraints if possible, or use default message
+              if (e.field === 'email') return 'Email invalide';
+              if (e.field === 'password') return 'Mot de passe trop court (min 8 caractères)';
+              return `${e.field}: ${e.defaultMessage}`;
+            });
+            msg = validationErrors.join(', ');
+          }
+        }
+
+        this.errorMessage = msg;
         this.isSignUpFailed = true;
       }
     });
