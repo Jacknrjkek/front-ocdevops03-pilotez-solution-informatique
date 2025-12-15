@@ -82,11 +82,9 @@ export class FileList implements OnInit {
   }
 
   confirmDelete(): void {
-    console.log('Confirm Delete called. ID:', this.fileToDeleteId);
     if (this.fileToDeleteId) {
       this.fileService.deleteFile(this.fileToDeleteId).subscribe({
         next: (res) => {
-          console.log('Delete success:', res);
           // 1. Close modal immediately
           this.cancelDelete();
 
