@@ -8,12 +8,22 @@ const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
+/**
+ * Service gérant l'authentification (Connexion, Inscription).
+ * Communique avec le backend Spring Boot via les endpoints /api/auth/*.
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
     private http = inject(HttpClient);
 
+    /**
+     * Authentifie l'utilisateur.
+     * @param email Email de l'utilisateur
+     * @param password Mot de passe (sera envoyé via HTTPS en production)
+     * @returns Observable contenant le JWT et les infos user
+     */
     login(email: string, password: string): Observable<any> {
         return this.http.post(
             AUTH_API + 'login',
@@ -25,6 +35,11 @@ export class AuthService {
         );
     }
 
+    /**
+     * Inscrit un nouvel utilisateur.
+     * @param email Email valide
+     * @param password Mot de passe (min 8 chars)
+     */
     register(email: string, password: string): Observable<any> {
         return this.http.post(
             AUTH_API + 'register',
@@ -37,6 +52,7 @@ export class AuthService {
     }
 
     logout(): void {
-        // Backend logout if needed, otherwise just client side cleanup (handled in component)
+        // Déconnexion purement client-side (suppression du token stocké)
+        // Pas d'appel backend requis car utilisation de JWT Stateless
     }
 }

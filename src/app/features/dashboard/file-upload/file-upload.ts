@@ -1,11 +1,15 @@
 
-import { Component, inject, ChangeDetectorRef } from '@angular/core'; // Add ChangeDetectorRef
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router'; // Import Router
+import { Router } from '@angular/router';
 import { FileService } from '../../../services/file.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 
+/**
+ * Composant de téléversement de fichier.
+ * Gère la sélection de fichier, la barre de progression et l'envoi au serveur.
+ */
 @Component({
   selector: 'app-file-upload',
   standalone: true,
@@ -18,12 +22,15 @@ export class FileUpload {
   currentFile?: File;
   progress = 0;
   message = '';
-  expirationTime = 1; // Default "Une journée" (1 day) per mockup
+  expirationTime = 1; // Par défaut: "Une journée" (1 jour)
 
   private fileService = inject(FileService);
   private router = inject(Router);
-  private cd = inject(ChangeDetectorRef); // Inject CD
+  private cd = inject(ChangeDetectorRef); // Nécessaire pour forcer le rafraîchissement UI lors de l'upload
 
+  /**
+   * Ouvre la boîte de dialogue système pour choisir un fichier.
+   */
   changeFile(): void {
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
     if (fileInput) {
@@ -31,6 +38,9 @@ export class FileUpload {
     }
   }
 
+  /**
+   * Formate la taille du fichier pour l'affichage (en Mo).
+   */
   get fileSize(): string {
     if (this.currentFile) {
       return (this.currentFile.size / (1024 * 1024)).toFixed(1) + ' Mo';
@@ -41,6 +51,9 @@ export class FileUpload {
     return '';
   }
 
+  /**
+   * Gestionnaire d'événement lors de la sélection d'un fichier.
+   */
   selectFile(event: any): void {
     console.log('File selected event:', event);
     this.selectedFiles = event.target.files;
@@ -49,6 +62,10 @@ export class FileUpload {
     this.progress = 0;
   }
 
+  /**
+   * Lance l'upload du fichier sélectionné.
+   * Gère les événements HTTP pour la barre de progression.
+   */
   upload(): void {
     console.log('Upload method called');
     this.progress = 0;
@@ -61,21 +78,26 @@ export class FileUpload {
         console.log('Processing file:', file.name);
         this.currentFile = file;
 
+        // Appel au service
         this.fileService.upload(this.currentFile, this.expirationTime).subscribe({
           next: (event: any) => {
             console.log('Upload event:', event);
+
+            // Calcul de la progression
             if (event.type === HttpEventType.UploadProgress) {
               if (event.total) {
                 this.progress = Math.round((100 * event.loaded) / event.total);
                 this.cd.detectChanges(); // Force UI update
               }
+
+              // Fin de l'upload
             } else if (event instanceof HttpResponse) {
               console.log('Upload complete');
-              this.progress = 100; // Force 100%
+              this.progress = 100;
               this.message = event.body.message || 'Fichier téléversé avec succès !';
               this.cd.detectChanges();
 
-              // Redirect to files list after short delay
+              // Redirection vers la liste après confirmation visuelle
               setTimeout(() => {
                 this.currentFile = undefined;
                 this.router.navigate(['/files']);

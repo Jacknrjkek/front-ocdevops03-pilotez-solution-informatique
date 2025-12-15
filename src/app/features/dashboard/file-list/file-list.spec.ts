@@ -5,6 +5,10 @@ import { StorageService } from '../../../services/storage.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
+/**
+ * Tests Unitaires pour le Composant FileList.
+ * Vérifie l'affichage, le filtrage et la logique de suppression (Modal, Service).
+ */
 describe('FileList Component', () => {
     let component: FileList;
     let fixture: ComponentFixture<FileList>;
@@ -17,6 +21,7 @@ describe('FileList Component', () => {
     ];
 
     beforeEach(async () => {
+        // Mock des services dépendants
         fileServiceMock = {
             getFiles: jest.fn().mockReturnValue(of(mockFiles)),
             deleteFile: jest.fn()
@@ -35,18 +40,24 @@ describe('FileList Component', () => {
 
         fixture = TestBed.createComponent(FileList);
         component = fixture.componentInstance;
-        fixture.detectChanges();
+        fixture.detectChanges(); // Déclenche ngOnInit
     });
 
     it('should create', () => {
         expect(component).toBeTruthy();
     });
 
+    /**
+     * Vérifie le chargement initial des fichiers.
+     */
     it('should retrieve files on init', () => {
         expect(fileServiceMock.getFiles).toHaveBeenCalled();
         expect(component.files.length).toBe(2);
     });
 
+    /**
+     * Teste la logique de filtrage (Tous / Actifs / Expirés).
+     */
     it('should filter files correctly', () => {
         // Default filter 'all'
         expect(component.filteredFiles.length).toBe(2);
@@ -68,12 +79,16 @@ describe('FileList Component', () => {
         expect(component.fileToDeleteId).toBe(1);
     });
 
+    /**
+     * Teste la suppression confirmée.
+     * Utilise fakeAsync/tick pour gérer l'auto-dissimulation du message de confirmation.
+     */
     it('should delete file successfully', fakeAsync(() => {
         component.openDeleteModal(1);
 
         fileServiceMock.deleteFile.mockReturnValue(of({ message: 'Deleted successfully' }));
 
-        // Spy on retrieveFiles to ensure it's called after delete
+        // Spy pour vérifier le rafraîchissement de la liste
         const retrieveSpy = jest.spyOn(component, 'retrieveFiles');
 
         component.confirmDelete();
@@ -84,11 +99,14 @@ describe('FileList Component', () => {
         expect(component.message).toBe('Deleted successfully');
         expect(retrieveSpy).toHaveBeenCalled();
 
-        // Check timeout message clearing
+        // Vérifie l'effacement du message après timeout (3s)
         tick(3000);
         expect(component.message).toBe('');
     }));
 
+    /**
+     * Teste la gestion des erreurs lors de suppression.
+     */
     it('should handle delete error', () => {
         component.openDeleteModal(1);
 

@@ -3,6 +3,10 @@ import { AuthService } from './auth.service';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 
+/**
+ * Tests Unitaires pour AuthService.
+ * Vérifie que les requêtes HTTP (Login, Register) sont correctement formées et exécutées.
+ */
 describe('AuthService', () => {
     let service: AuthService;
     let httpMock: HttpTestingController;
@@ -11,8 +15,8 @@ describe('AuthService', () => {
         TestBed.configureTestingModule({
             providers: [
                 AuthService,
-                provideHttpClient(),
-                provideHttpClientTesting()
+                provideHttpClient(), // Fournit HttpClient réel pour le service
+                provideHttpClientTesting() // Mocke les requêtes HTTP
             ]
         });
         service = TestBed.inject(AuthService);
@@ -20,6 +24,7 @@ describe('AuthService', () => {
     });
 
     afterEach(() => {
+        // Vérifie qu'aucune requête HTTP n'est restée en attente
         httpMock.verify();
     });
 
@@ -27,6 +32,9 @@ describe('AuthService', () => {
         expect(service).toBeTruthy();
     });
 
+    /**
+     * Teste l'envoi de la requête de connexion (POST /api/auth/login).
+     */
     it('should send login request', () => {
         const dummyResponse = { token: 'xyz' };
         const email = 'test@test.com';
@@ -36,12 +44,18 @@ describe('AuthService', () => {
             expect(res).toEqual(dummyResponse);
         });
 
+        // Intercepte la requête et vérifie ses paramètres
         const req = httpMock.expectOne('http://localhost:8080/api/auth/login');
         expect(req.request.method).toBe('POST');
         expect(req.request.body).toEqual({ email, password });
+
+        // Simule la réponse serveur
         req.flush(dummyResponse);
     });
 
+    /**
+     * Teste l'envoi de la requête d'inscription (POST /api/auth/register).
+     */
     it('should send register request', () => {
         const dummyResponse = { message: 'User registered' };
         const email = 'new@test.com';

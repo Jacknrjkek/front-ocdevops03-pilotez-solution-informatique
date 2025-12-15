@@ -7,6 +7,10 @@ import { StorageService } from '../../../services/storage.service';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../../layout/header/header';
 
+/**
+ * Composant conteneur pour le Tableau de bord.
+ * Intègre la liste des fichiers et le Header.
+ */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -19,6 +23,9 @@ export class Dashboard {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  /**
+   * Déconnecte l'utilisateur et redirige vers le login.
+   */
   logout(): void {
     this.authService.logout();
     this.storageService.clean();

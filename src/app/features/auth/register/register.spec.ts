@@ -5,6 +5,10 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
+/**
+ * Tests Unitaires pour le Composant Register.
+ * Vérifie l'intégration avec AuthService, la navigation et l'affichage des erreurs.
+ */
 describe('Register Component', () => {
     let component: Register;
     let fixture: ComponentFixture<Register>;
@@ -12,6 +16,7 @@ describe('Register Component', () => {
     let router: Router;
 
     beforeEach(async () => {
+        // Mock du service d'authentification
         authServiceMock = {
             register: jest.fn()
         };
@@ -26,6 +31,8 @@ describe('Register Component', () => {
         fixture = TestBed.createComponent(Register);
         component = fixture.componentInstance;
         router = TestBed.inject(Router);
+
+        // Empêche la navigation réelle
         jest.spyOn(router, 'navigate').mockImplementation(() => Promise.resolve(true));
 
         fixture.detectChanges();
@@ -35,6 +42,9 @@ describe('Register Component', () => {
         expect(component).toBeTruthy();
     });
 
+    /**
+     * Vérifie le succès : Appel service + Redirection vers Home.
+     */
     it('should call authService.register and navigate on success', () => {
         const email = 'test@test.com';
         const password = 'password123';
@@ -50,12 +60,16 @@ describe('Register Component', () => {
         expect(component.isSignUpFailed).toBeFalsy();
     });
 
+    /**
+     * Vérifie la gestion des erreurs de validation (400 Bad Request).
+     * Doit parser l'objet d'erreur Spring Boot pour afficher un message lisible.
+     */
     it('should display error message on registration failure (validation error)', () => {
         const email = 'invalid-email';
         const password = '123';
         component.form = { email, password };
 
-        // Mock backend validation error response (400 Bad Request structure)
+        // Mock d'une réponse d'erreur de validation Backend
         const errorResponse = {
             error: {
                 errors: [
@@ -72,11 +86,14 @@ describe('Register Component', () => {
         expect(authServiceMock.register).toHaveBeenCalled();
         expect(component.isSignUpFailed).toBeTruthy();
 
-        // Check if messages were parsed correctly based on the logic in register.ts
+        // Vérification du parsing des messages
         expect(component.errorMessage).toContain('Email invalide');
         expect(component.errorMessage).toContain('Mot de passe trop court');
     });
 
+    /**
+     * Vérifie le fallback sur un message d'erreur générique.
+     */
     it('should display generic error message on server error', () => {
         component.form = { email: 'test@test.com', password: 'password' };
 
@@ -85,6 +102,6 @@ describe('Register Component', () => {
         component.onSubmit();
 
         expect(component.isSignUpFailed).toBeTruthy();
-        expect(component.errorMessage).toBe("Erreur d'inscription"); // Fallback
+        expect(component.errorMessage).toBe("Erreur d'inscription");
     });
 });

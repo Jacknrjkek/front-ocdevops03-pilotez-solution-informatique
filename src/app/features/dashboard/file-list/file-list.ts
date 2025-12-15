@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
 import { Router } from '@angular/router';
 
-
-
+/**
+ * Composant principal du tableau de bord.
+ * Affiche la liste des fichiers utilisateur avec filtrage et actions (Suppression, Partage).
+ */
 @Component({
   selector: 'app-file-list',
   standalone: true,
@@ -15,12 +17,13 @@ import { Router } from '@angular/router';
 export class FileList implements OnInit {
   files: any[] = [];
   message = '';
-  private fileService = inject(FileService);
 
+  // Injection des dépendances (Style Angular 16+)
+  private fileService = inject(FileService);
   private router = inject(Router);
   private cd = inject(ChangeDetectorRef);
 
-
+  // Filtre actuel pour l'affichage (Tout, Actifs, Expirés)
   filter: 'all' | 'active' | 'expired' = 'all';
 
   ngOnInit(): void {
@@ -31,6 +34,9 @@ export class FileList implements OnInit {
     this.filter = filter;
   }
 
+  /**
+   * Retourne la liste des fichiers filtrée selon le critère choisi.
+   */
   get filteredFiles(): any[] {
     const now = new Date();
     return this.files.filter(file => {
@@ -47,6 +53,9 @@ export class FileList implements OnInit {
     return new Date(file.expirationDate) < new Date();
   }
 
+  /**
+   * Calcule le texte d'expiration affiché (Ex: "Expire dans 2 jours").
+   */
   getExpirationText(file: any): string {
     const expirationDate = new Date(file.expirationDate);
     const now = new Date();
@@ -62,6 +71,9 @@ export class FileList implements OnInit {
     return `Expire dans ${diffDays} jours`;
   }
 
+  /**
+   * Charge les fichiers depuis le backend.
+   */
   retrieveFiles(): void {
     this.fileService.getFiles().subscribe({
       next: (data) => {
@@ -71,6 +83,8 @@ export class FileList implements OnInit {
       error: (e) => console.error(e)
     });
   }
+
+  // --- Gestion de la modale de suppression ---
 
   fileToDeleteId: number | null = null;
   showDeleteModal = false;
@@ -85,16 +99,16 @@ export class FileList implements OnInit {
     if (this.fileToDeleteId) {
       this.fileService.deleteFile(this.fileToDeleteId).subscribe({
         next: (res) => {
-          // 1. Close modal immediately
+          // 1. Fermer la modale
           this.cancelDelete();
 
-          // 2. Update UI message (Safe check for null res from 204 No Content)
+          // 2. Feedback utilisateur
           this.message = (res && res.message) ? res.message : 'Fichier supprimé !';
 
-          // 3. Refresh list
+          // 3. Rafraîchir la liste
           this.retrieveFiles();
 
-          // 4. Clear message after delay
+          // 4. Nettoyer le message après délai
           setTimeout(() => {
             this.message = '';
             this.cd.detectChanges();
@@ -115,15 +129,19 @@ export class FileList implements OnInit {
   cancelDelete(): void {
     this.fileToDeleteId = null;
     this.showDeleteModal = false;
-    this.cd.detectChanges(); // Force UI to close modal
+    this.cd.detectChanges();
   }
 
+  /**
+   * Copie le lien de partage dans le presse-papier.
+   * Gère le feedback visuel sur le bouton.
+   */
   copyLink(token: string, event: Event): void {
     if (!token) return;
 
     const url = 'http://localhost:4200/share/' + token;
     navigator.clipboard.writeText(url).then(() => {
-      // Button Feedback
+      // Feedback Visuel
       const button = event.target as HTMLButtonElement;
       const originalText = button.innerText;
       button.innerText = '✅ Copié !';
