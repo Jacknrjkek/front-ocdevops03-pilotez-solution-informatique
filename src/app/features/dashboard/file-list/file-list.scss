@@ -164,6 +164,19 @@
     margin-right: 1rem;
 }
 
+.download-count {
+    font-size: 0.85rem;
+    color: #059669;
+    background-color: #ECFDF5;
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin-right: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border: 1px solid #D1FAE5;
+}
+
 .file-actions {
     display: flex;
     gap: 1rem;
