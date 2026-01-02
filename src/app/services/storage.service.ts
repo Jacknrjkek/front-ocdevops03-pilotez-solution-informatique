@@ -58,7 +58,7 @@ export class StorageService {
      * Vérifie si l'utilisateur est connecté (présence de données).
      */
     public isLoggedIn(): boolean {
-        const user = window.localStorage.getItem(USER_STORAGE_KEY);
-        return !!user;
+        const token = window.localStorage.getItem(TOKEN_STORAGE_KEY);
+        return !!token;
     }
 }

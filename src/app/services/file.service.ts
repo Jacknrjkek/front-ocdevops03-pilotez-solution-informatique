@@ -39,6 +39,25 @@ export class FileService {
     }
 
     /**
+     * Téléverse un fichier anonymement (US07).
+     */
+    uploadAnonymous(file: File, expirationTime?: number): Observable<HttpEvent<any>> {
+        const formData: FormData = new FormData();
+
+        formData.append('file', file);
+        if (expirationTime) {
+            formData.append('expirationTime', expirationTime.toString());
+        }
+
+        const req = new HttpRequest('POST', `${this.baseUrl}/upload/anonymous`, formData, {
+            reportProgress: true,
+            responseType: 'json'
+        });
+
+        return this.http.request(req);
+    }
+
+    /**
      * Récupère la liste des fichiers de l'utilisateur connecté.
      */
     getFiles(): Observable<any> {
@@ -62,5 +81,12 @@ export class FileService {
         // Ici, j'utilise .post avec /delete/{id} probablement car il y avait un souci de config CORS DELETE
         // ou un choix d'implémentation spécifique. Je garde tel quel pour éviter la régression.
         return this.http.post(`${this.baseUrl}/delete/${id}`, {}, { headers });
+    }
+    addTag(id: number, tag: string): Observable<any> {
+        return this.http.post(`${this.baseUrl}/${id}/tags`, { tag });
+    }
+
+    removeTag(id: number, tag: string): Observable<any> {
+        return this.http.delete(`${this.baseUrl}/${id}/tags/${tag}`);
     }
 }

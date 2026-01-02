@@ -2,7 +2,7 @@
     <header class="home-header">
         <div class="brand">DataShare</div>
         <button class="btn-space" (click)="goToSpace()">
-            {{ isLoggedIn ? 'Mon espace' : 'Se connecter' }}
+            {{ isLoggedIn ? 'Mon tableau de bord' : 'Se connecter' }}
         </button>
     </header>
 
@@ -10,7 +10,7 @@
         <h1>Tu veux partager un fichier ?</h1>
 
         <div class="upload-wrapper">
-            <app-file-upload></app-file-upload>
+            <app-anonymous-upload></app-anonymous-upload>
         </div>
     </main>
 

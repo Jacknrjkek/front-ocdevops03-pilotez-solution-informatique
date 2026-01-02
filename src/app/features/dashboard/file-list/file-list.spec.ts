@@ -117,4 +117,52 @@ describe('FileList Component', () => {
         expect(fileServiceMock.deleteFile).toHaveBeenCalledWith(1);
         expect(component.message).toContain('Forbidden');
     });
+
+    it('should add a tag', () => {
+        const mockFile = { id: 1, tags: [] as string[] };
+        // Structure de l'event pour un input
+        const mockEvent = { target: { value: 'NewTag' } };
+
+        fileServiceMock.addTag = jest.fn().mockReturnValue(of({}));
+
+        component.addTag(mockFile, mockEvent);
+
+        expect(fileServiceMock.addTag).toHaveBeenCalledWith(1, 'NewTag');
+        expect(mockFile.tags).toContain('NewTag');
+        expect(mockEvent.target.value).toBe('');
+    });
+
+    it('should not add a tag > 30 chars', () => {
+        const mockFile = { id: 1, tags: [] };
+        const longTag = 'a'.repeat(31);
+        const mockEvent = { target: { value: longTag } };
+
+        // Mock addTag explicitly for this test if not already present
+        fileServiceMock.addTag = jest.fn();
+
+        component.addTag(mockFile, mockEvent);
+
+        expect(fileServiceMock.addTag).not.toHaveBeenCalled();
+        expect(component.message).toContain('30 caractères');
+    });
+
+    it('should remove a tag', () => {
+        const mockFile = { id: 1, tags: ['OldTag'] };
+
+        fileServiceMock.removeTag = jest.fn().mockReturnValue(of({}));
+
+        component.removeTag(mockFile, 'OldTag');
+
+        expect(fileServiceMock.removeTag).toHaveBeenCalledWith(1, 'OldTag');
+        // Note: Le composant utilise filter, donc mockFile.tags est réassigné
+        // Mais mockFile.tags est une référence locale ici qui ne sera pas "vue" changée
+        // si le composant fait: file.tags = file.tags.filter(...)
+        // SAUF si mockFile est exactement l'objet passé.
+        // Testons le comportement du composant sur l'objet passé
+
+        // ATTENTION: filter() retourne un nouveau tableau.
+        // component.removeTag fait: file.tags = ...
+        // Donc la propriété 'tags' de l'objet mockFile doit changer.
+        expect(mockFile.tags.length).toBe(0);
+    });
 });

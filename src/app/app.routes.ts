@@ -4,6 +4,7 @@ import { Register } from './features/auth/register/register';
 import { Dashboard } from './features/dashboard/dashboard/dashboard';
 import { Home } from './features/home/home/home';
 import { ShareView } from './features/share/share-view/share-view';
+import { AnonymousUploadComponent } from './features/transfer/anonymous-upload/anonymous-upload';
 
 /**
  * Définition des routes de l'application.
@@ -23,6 +24,8 @@ export const routes: Routes = [
     // Route Publique pour l'accès aux fichiers partagés via Token
     { path: 'share/:token', component: ShareView },
 
-    // Redirection par défaut vers le login
-    { path: '', redirectTo: 'login', pathMatch: 'full' }
+
+
+    // Redirection par défaut vers home
+    { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

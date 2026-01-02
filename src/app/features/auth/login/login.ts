@@ -65,8 +65,12 @@ export class Login {
       },
       error: err => {
         console.error('Login Error:', err);
-        // Affichage du message d'erreur (Backend ou par défaut)
-        this.errorMessage = err.error?.message || err.message || 'Erreur de connexion';
+        // Gestion des erreurs d'authentification
+        if (err.status === 401) {
+          this.errorMessage = "Email ou mot de passe incorrect.";
+        } else {
+          this.errorMessage = err.error?.message || "Une erreur est survenue lors de la connexion.";
+        }
         this.isLoginFailed = true;
       }
     });

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FileUpload } from '../../dashboard/file-upload/file-upload';
+import { AnonymousUploadComponent } from '../../transfer/anonymous-upload/anonymous-upload';
 import { HeaderComponent } from '../../../layout/header/header';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -13,7 +13,7 @@ import { StorageService } from '../../../services/storage.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FileUpload, HeaderComponent],
+  imports: [CommonModule, AnonymousUploadComponent, HeaderComponent],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
@@ -43,6 +43,6 @@ export class Home {
   logout(): void {
     this.authService.logout();
     this.storageService.clean();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 }

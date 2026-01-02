@@ -6,6 +6,10 @@
             <button [class.active]="filter === 'all'" (click)="setFilter('all')">Tous</button>
             <button [class.active]="filter === 'active'" (click)="setFilter('active')">Actifs</button>
             <button [class.active]="filter === 'expired'" (click)="setFilter('expired')">Expiré</button>
+
+            <div class="tag-search">
+                <input type="text" placeholder="🔍  Rechercher par tag..." [(ngModel)]="tagFilter" class="search-input">
+            </div>
         </div>
     </div>
 
@@ -21,6 +25,19 @@
                 <div class="file-name">{{ file.originalName }}</div>
                 <div class="file-status" [class.status-expired]="isExpired(file)">
                     {{ getExpirationText(file) }}
+                </div>
+
+                <!-- TAGS SECTION -->
+                <div class="tags-container" *ngIf="!isExpired(file)">
+                    <div class="tag-badge" *ngFor="let tag of file.tags">
+                        {{ tag }}
+                        <span class="remove-tag" (click)="removeTag(file, tag)">×</span>
+                    </div>
+
+                    <div class="add-tag-wrapper">
+                        <input type="text" placeholder="+ Tag" class="tag-input" (keydown.enter)="addTag(file, $event)"
+                            maxlength="30">
+                    </div>
                 </div>
             </div>
 

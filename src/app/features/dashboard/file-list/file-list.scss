@@ -58,6 +58,30 @@
             box-shadow: 0 4px 6px -1px rgba(248, 155, 133, 0.4);
         }
     }
+
+    .tag-search {
+        margin-left: auto; // Push to the right
+
+        .search-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 9999px; // Pill shape to match buttons
+            font-size: 0.95rem;
+            outline: none;
+            color: #374151;
+            width: 200px;
+            transition: all 0.2s;
+
+            &:focus {
+                border-color: #F89B85; // Theme color
+                box-shadow: 0 0 0 2px rgba(248, 155, 133, 0.1);
+            }
+
+            &::placeholder {
+                color: #9CA3AF;
+            }
+        }
+    }
 }
 
 .alert {
@@ -302,5 +326,58 @@
         &:hover {
             background: #DC2626;
         }
+    }
+}
+
+// Styles for Tags
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    align-items: center;
+}
+
+.tag-badge {
+    background-color: #f0f0f0;
+    color: #333;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid #ddd;
+}
+
+.remove-tag {
+    cursor: pointer;
+    font-weight: bold;
+    color: #999;
+
+    &:hover {
+        color: #ff4d4d;
+    }
+}
+
+.add-tag-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.tag-input {
+    border: 1px solid #e0e0e0; // Lighter border
+    background: transparent;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    width: 60px; // Small width by default
+    transition: width 0.2s, border-color 0.2s;
+    outline: none;
+
+    &:focus {
+        width: 120px; // Expand on focus
+        border-color: #F89B85; // Theme color
+        background: white;
     }
 }

@@ -29,7 +29,7 @@ export class Dashboard {
   logout(): void {
     this.authService.logout();
     this.storageService.clean();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 
   goToUpload(): void {

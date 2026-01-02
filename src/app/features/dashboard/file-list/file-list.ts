@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { FileService } from '../../../services/file.service';
 import { Router } from '@angular/router';
 
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-file-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './file-list.html',
   styleUrl: './file-list.scss',
 })
@@ -25,6 +26,7 @@ export class FileList implements OnInit {
 
   // Filtre actuel pour l'affichage (Tout, Actifs, Expirés)
   filter: 'all' | 'active' | 'expired' = 'all';
+  tagFilter: string = ''; // Filtre par tag
 
   ngOnInit(): void {
     this.retrieveFiles();
@@ -35,16 +37,30 @@ export class FileList implements OnInit {
   }
 
   /**
-   * Retourne la liste des fichiers filtrée selon le critère choisi.
+   * Retourne la liste des fichiers filtrée selon le critère choisi et le tag recherché.
    */
   get filteredFiles(): any[] {
     const now = new Date();
+    const searchTag = this.tagFilter.toLowerCase().trim();
+
     return this.files.filter(file => {
+      // 1. Filtre par Status
       const expirationDate = new Date(file.expirationDate);
       const isExpired = expirationDate < now;
+      let statusMatch = true;
 
-      if (this.filter === 'active') return !isExpired;
-      if (this.filter === 'expired') return isExpired;
+      if (this.filter === 'active') statusMatch = !isExpired;
+      if (this.filter === 'expired') statusMatch = isExpired;
+
+      if (!statusMatch) return false;
+
+      // 2. Filtre par Tag (Si renseigné)
+      if (searchTag) {
+        if (!file.tags || file.tags.length === 0) return false;
+        // Vérifie si au moins un tag contient le texte recherché
+        return file.tags.some((t: string) => t.toLowerCase().includes(searchTag));
+      }
+
       return true;
     });
   }
@@ -155,8 +171,64 @@ export class FileList implements OnInit {
         this.message = '';
       }, 2000);
     }).catch(err => {
+    }).catch(err => {
       console.error('Failed to copy: ', err);
       this.message = 'Erreur lors de la copie du lien';
+    });
+  }
+
+  /**
+   * Ajoute un tag à un fichier.
+   */
+  addTag(file: any, event: any): void {
+    const input = event.target as HTMLInputElement;
+    const tag = input.value.trim();
+
+    if (!tag) return;
+
+    if (tag.length > 30) {
+      this.message = 'Le tag ne doit pas dépasser 30 caractères.';
+      this.cd.detectChanges();
+      setTimeout(() => { this.message = ''; this.cd.detectChanges(); }, 3000);
+      return;
+    }
+
+    if (file.tags && file.tags.includes(tag)) {
+      input.value = ''; // Clear duplicate
+      return;
+    }
+
+    this.fileService.addTag(file.id, tag).subscribe({
+      next: () => {
+        if (!file.tags) {
+          file.tags = [];
+        }
+        file.tags.push(tag);
+        input.value = '';
+        this.cd.detectChanges();
+      },
+      error: (e) => {
+        const errorMsg = e.error && e.error.message ? e.error.message : 'Erreur ajout tag';
+        this.message = errorMsg;
+        this.cd.detectChanges();
+      }
+    });
+  }
+
+  /**
+   * Supprime un tag d'un fichier.
+   */
+  removeTag(file: any, tag: string): void {
+    this.fileService.removeTag(file.id, tag).subscribe({
+      next: () => {
+        file.tags = file.tags.filter((t: string) => t !== tag);
+        this.cd.detectChanges();
+      },
+      error: (e) => {
+        console.error('Remove tag error', e);
+        this.message = 'Erreur suppression tag';
+        this.cd.detectChanges();
+      }
     });
   }
 }

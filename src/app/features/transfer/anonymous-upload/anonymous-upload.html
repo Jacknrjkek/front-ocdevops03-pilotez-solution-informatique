@@ -1,0 +1,85 @@
+<div class="container mt-5"
+    style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+
+    <!-- Header Removed -->
+
+
+
+    <div class="upload-card">
+
+        <div *ngIf="!currentFile && !shareToken" style="width: 100%; display: flex; justify-content: center;">
+            <input type="file" id="fileInput" (change)="selectFile($event)" class="file-input" />
+
+            <!-- TRIGGER BUTTON (Default State) -->
+            <label *ngIf="!selectedFiles || selectedFiles.length === 0" for="fileInput" class="upload-trigger">
+                <div class="icon-circle">
+                    <span>☁️</span>
+                </div>
+            </label>
+
+            <!-- MODAL CARD (Active State) -->
+            <div class="upload-modal" *ngIf="selectedFiles && selectedFiles.length > 0">
+                <h3>Ajouter un fichier</h3>
+
+                <!-- File Row -->
+                <div class="file-summary-row">
+                    <div class="file-icon-small">📄</div>
+                    <div class="file-info-text">
+                        <span class="file-name">{{ selectedFiles[0].name | slice:0:20 }}{{ selectedFiles[0].name.length
+                            > 20 ? '...' : '' }}</span>
+                        <span class="file-size">{{ fileSize }}</span>
+                    </div>
+                    <button class="btn-change" (click)="changeFile()">Changer</button>
+                </div>
+
+                <!-- Expiration -->
+                <div class="form-group mt-3">
+                    <label for="expiration">Expiration</label>
+                    <select id="expiration" [(ngModel)]="expirationTime" class="form-select">
+                        <option [value]="1">Une journée</option>
+                        <option [value]="3">3 jours</option>
+                        <option [value]="7">7 jours</option>
+                    </select>
+                </div>
+
+                <button class="btn-primary mt-4" (click)="upload()">
+                    <span class="icon">☁️</span> Téléverser
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="currentFile && !shareToken" class="progress-info">
+            <h3>Envoi en cours...</h3>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" [style.width.%]="progress" [attr.aria-valuenow]="progress"
+                    aria-valuemin="0" aria-valuemax="100">
+                </div>
+            </div>
+            <p>{{ progress }}%</p>
+        </div>
+
+        <!-- Success Screen (Specific to Anonymous Upload) -->
+        <div *ngIf="shareToken" class="upload-modal">
+            <h3>Fichier téléversé !</h3>
+
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+
+            <p class="mt-3">Voici votre lien de partage unique :</p>
+            <div class="input-group mb-3 w-100">
+                <span class="input-group-text">🔗</span>
+                <input type="text" class="form-control" [value]="'http://localhost:4200/share/' + shareToken" readonly>
+            </div>
+            <p class="text-muted small">Ce lien expirera dans {{ expirationTime }} jour(s).</p>
+
+            <button class="btn-primary mt-3" (click)="selectFile({target: {files: null}})">
+                Envoyer un autre fichier
+            </button>
+        </div>
+
+        <div *ngIf="message && !shareToken" class="alert mt-3" [class.alert-danger]="progress === 0">
+            {{ message }}
+        </div>
+    </div>
+</div>
