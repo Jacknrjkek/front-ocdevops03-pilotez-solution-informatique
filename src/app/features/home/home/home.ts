@@ -1,9 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnonymousUploadComponent } from '../../transfer/anonymous-upload/anonymous-upload';
-import { HeaderComponent } from '../../../layout/header/header';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
 import { StorageService } from '../../../services/storage.service';
 
 /**
@@ -13,13 +11,12 @@ import { StorageService } from '../../../services/storage.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, AnonymousUploadComponent, HeaderComponent],
+  imports: [CommonModule, AnonymousUploadComponent],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
 export class Home {
   private storageService = inject(StorageService);
-  private authService = inject(AuthService);
   private router = inject(Router);
 
   /**
@@ -38,11 +35,5 @@ export class Home {
     } else {
       this.router.navigate(['/login']);
     }
-  }
-
-  logout(): void {
-    this.authService.logout();
-    this.storageService.clean();
-    this.router.navigate(['/home']);
   }
 }

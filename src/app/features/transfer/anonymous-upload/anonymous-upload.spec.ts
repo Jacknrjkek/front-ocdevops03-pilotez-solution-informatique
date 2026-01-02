@@ -85,7 +85,7 @@ describe('AnonymousUploadComponent', () => {
         const mockFile = new File(['test'], 'test.txt', { type: 'text/plain' });
         const event = { target: { files: { item: () => mockFile, 0: mockFile, length: 1 } } };
         component.currentFile = mockFile;
-        const password = TEST_CONSTANTS.FILE_PASSWORD;
+        const password = TEST_CONSTANTS.MOCK_FILE_SECRET;
 
         const mockResponse = new HttpResponse({
             body: { message: 'Success', shareToken: 'TOKEN_SECURED' }
@@ -109,7 +109,7 @@ describe('AnonymousUploadComponent', () => {
 
         component.selectFile(event);
         component.enablePassword = true;
-        component.password = TEST_CONSTANTS.SHORT_PASSWORD; // Too short
+        component.password = TEST_CONSTANTS.MOCK_SHORT_SECRET; // Too short
         component.upload();
         tick();
 

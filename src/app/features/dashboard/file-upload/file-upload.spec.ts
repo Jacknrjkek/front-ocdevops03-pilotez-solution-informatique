@@ -46,7 +46,7 @@ describe('FileUpload', () => {
     it('should upload with password protection', fakeAsync(() => {
         const mockFile = new File(['test'], 'protected.txt', { type: 'text/plain' });
         const event = { target: { files: { item: () => mockFile, 0: mockFile, length: 1 } } };
-        const password = TEST_CONSTANTS.FILE_PASSWORD;
+        const password = TEST_CONSTANTS.MOCK_FILE_SECRET;
 
         const mockResponse = new HttpResponse({
             body: { message: 'Success' }
@@ -71,7 +71,7 @@ describe('FileUpload', () => {
 
         component.selectFile(event);
         component.enablePassword = true;
-        component.password = TEST_CONSTANTS.SHORT_PASSWORD;
+        component.password = TEST_CONSTANTS.MOCK_SHORT_SECRET;
         component.upload();
         tick();
 

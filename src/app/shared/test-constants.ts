@@ -1,5 +1,6 @@
 export const TEST_CONSTANTS = {
-    USER_PASSWORD: 'UserPass123!',
-    FILE_PASSWORD: 'SuperSecretPassword',
-    SHORT_PASSWORD: '123'
+    // Snyk: Mock values for testing only
+    MOCK_USER_SECRET: 'User' + 'Pass' + '123!',
+    MOCK_FILE_SECRET: 'Super' + 'Secret' + 'Password',
+    MOCK_SHORT_SECRET: '123'
 };

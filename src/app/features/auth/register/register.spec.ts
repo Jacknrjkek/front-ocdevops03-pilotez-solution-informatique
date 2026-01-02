@@ -49,7 +49,7 @@ describe('Register Component', () => {
      */
     it('should call authService.register and navigate on success', () => {
         const email = 'test@test.com';
-        const password = TEST_CONSTANTS.USER_PASSWORD;
+        const password = TEST_CONSTANTS.MOCK_USER_SECRET;
         component.form.email = email;
         component.form.password = password;
 
@@ -68,7 +68,7 @@ describe('Register Component', () => {
      */
     it('should display error message on registration failure (validation error)', () => {
         const email = 'test@test.com';
-        const password = TEST_CONSTANTS.SHORT_PASSWORD;
+        const password = TEST_CONSTANTS.MOCK_SHORT_SECRET;
         component.form = { email, password };
 
         // Mock d'une réponse d'erreur de validation Backend

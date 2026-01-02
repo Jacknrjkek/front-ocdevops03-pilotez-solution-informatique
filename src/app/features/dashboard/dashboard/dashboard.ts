@@ -5,7 +5,7 @@ import { FileList } from '../file-list/file-list';
 import { AuthService } from '../../../services/auth.service';
 import { StorageService } from '../../../services/storage.service';
 import { Router } from '@angular/router';
-import { HeaderComponent } from '../../../layout/header/header';
+
 
 /**
  * Composant conteneur pour le Tableau de bord.
@@ -14,7 +14,7 @@ import { HeaderComponent } from '../../../layout/header/header';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FileList, HeaderComponent],
+  imports: [CommonModule, FileList],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

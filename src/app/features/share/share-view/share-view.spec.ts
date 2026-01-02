@@ -60,7 +60,7 @@ describe('ShareView', () => {
     it('should download protected file with correct password', fakeAsync(() => {
         component.fileData = { fileName: 'secret.txt', isProtected: true };
         // Simulate user entering the correct password
-        component.password = TEST_CONSTANTS.FILE_PASSWORD;
+        component.password = TEST_CONSTANTS.MOCK_FILE_SECRET;
         component.token = 'TOKEN123';
 
         const mockBlob = new Blob(['content'], { type: 'text/plain' });
@@ -73,7 +73,7 @@ describe('ShareView', () => {
         component.download();
         tick();
 
-        expect(mockShareService.downloadProtected).toHaveBeenCalledWith('TOKEN123', TEST_CONSTANTS.FILE_PASSWORD);
+        expect(mockShareService.downloadProtected).toHaveBeenCalledWith('TOKEN123', TEST_CONSTANTS.MOCK_FILE_SECRET);
         expect(component.passwordError).toBe(false);
     }));
 
